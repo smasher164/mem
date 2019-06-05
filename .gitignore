@@ -1,0 +1,16 @@
+# Ignore everything
+*
+# Whitelist subdirectories
+!*/
+
+# Whitelist the following extensions
+!*.go
+!*.md
+!.gitignore
+!.travis.yml
+
+# Whitelist the following files
+!LICENSE.md
+!README.md
+!go.mod
+!go.sum
