@@ -1,9 +1,11 @@
 language: go
 go:
   - "1.12.x"
+env:
+  - env GO111MODULE=on
 os:
   - linux
   - osx
   - windows
 script:
-  - env GO111MODULE=on go test -v ./...
+  - go test -v ./...
