@@ -13,7 +13,7 @@ type slice struct {
 }
 
 func mmap(size uint) (unsafe.Pointer, error) {
-	b, err := unix.Mmap(0, 0, int(size), unix.PROT_READ|unix.PROT_WRITE, unix.MAP_PRIVATE|unix.MAP_ANONYMOUS)
+	b, err := unix.Mmap(-1, 0, int(size), unix.PROT_READ|unix.PROT_WRITE, unix.MAP_PRIVATE|unix.MAP_ANONYMOUS)
 	if err != nil {
 		return nil, err
 	}
