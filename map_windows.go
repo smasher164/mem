@@ -15,5 +15,5 @@ func mmap(size uint) (unsafe.Pointer, error) {
 }
 
 func munmap(p unsafe.Pointer) error {
-	return windows.VirtualFree(uinptr(p), 0, windows.MEM_RELEASE)
+	return windows.VirtualFree(uintptr(p), 0, windows.MEM_RELEASE)
 }
