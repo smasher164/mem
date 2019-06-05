@@ -1,5 +1,8 @@
 # mem
 
+[![GoDoc](https://godoc.org/github.com/smasher164/mem?status.svg)](https://godoc.org/github.com/smasher164/mem)
+[![Build Status](https://travis-ci.org/smasher164/mem.svg?branch=master)](https://travis-ci.org/smasher164/mem)
+
 Package mem implements a memory allocator and deallocator.
 It currently uses mmap on unix and VirtualAlloc on windows
 to request pages of memory from the operating system, and
