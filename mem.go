@@ -42,11 +42,11 @@ func roundMultiple(n, k uint) uint {
 // POSIX libc's malloc. However, Alloc panics if an error occurs when
 // requesting more memory from the operating system.
 func Alloc(size uint) unsafe.Pointer {
-	m.Lock()
-	defer m.Unlock()
 	if size == 0 {
 		return nil
 	}
+	m.Lock()
+	defer m.Unlock()
 	// Iterate through linked list of headers.
 	p := freep
 	for {
@@ -97,11 +97,11 @@ func Alloc(size uint) unsafe.Pointer {
 // However, Free panics if an error occurs when releasing memory to
 // the operating system.
 func Free(p unsafe.Pointer) {
-	m.Lock()
-	defer m.Unlock()
 	if p == nil {
 		return
 	}
+	m.Lock()
+	defer m.Unlock()
 	h := (*header)(unsafe.Pointer(uintptr(p) - uintptr(szheader)))
 	arcurr := h.arena
 	h.allocated = false
