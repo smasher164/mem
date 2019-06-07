@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"sync"
 	"testing"
 	"unsafe"
 
@@ -76,7 +77,7 @@ func TestMixed(t *testing.T) {
 	rand.Shuffle(len(allocs), func(i, j int) {
 		allocs[i], allocs[j] = allocs[j], allocs[i]
 	})
-	for i := 29; i >= 10; i-- {
+	for i := 30 - 1; i >= 10; i-- {
 		p := allocs[i]
 		if err := errpanic(func() { mem.Free(p) }); err != nil {
 			t.Errorf("mem.Free(%p) panics: %v", p, err)
@@ -92,4 +93,32 @@ func TestMixed(t *testing.T) {
 			t.Errorf("mem.Free(%p) panics: %v", p, err)
 		}
 	}
+}
+
+func TestConsecutiveConcurrent(t *testing.T) {
+	var wg sync.WaitGroup
+	var allocs []unsafe.Pointer
+	var m sync.Mutex
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			p := allocTester(t)
+			m.Lock()
+			allocs = append(allocs, p)
+			m.Unlock()
+		}()
+	}
+	wg.Wait()
+	for _, p := range allocs {
+		p := p
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if err := errpanic(func() { mem.Free(p) }); err != nil {
+				t.Errorf("mem.Free(%p) panics: %v", p, err)
+			}
+		}()
+	}
+	wg.Wait()
 }
