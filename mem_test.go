@@ -122,3 +122,32 @@ func TestConsecutiveConcurrent(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+func BenchmarkConsecutiveAlloc(b *testing.B) {
+	b.ReportAllocs()
+	b.StopTimer()
+	allocs := make([]unsafe.Pointer, b.N)
+	for i := 0; i < b.N; i++ {
+		size := uint(rand.Intn(szpage * (1 + rand.Intn(8))))
+		b.StartTimer()
+		allocs[i] = mem.Alloc(size)
+		b.StopTimer()
+	}
+	for _, p := range allocs {
+		mem.Free(p)
+	}
+}
+
+func BenchmarkConsecutiveFree(b *testing.B) {
+	b.ReportAllocs()
+	b.StopTimer()
+	allocs := make([]unsafe.Pointer, b.N)
+	for i := 0; i < b.N; i++ {
+		size := uint(rand.Intn(szpage * (1 + rand.Intn(8))))
+		allocs[i] = mem.Alloc(size)
+	}
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+		mem.Free(allocs[i])
+	}
+}
