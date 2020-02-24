@@ -1,6 +1,6 @@
 # mem
 
-[![GoDoc](https://godoc.org/github.com/smasher164/mem?status.svg)](https://godoc.org/github.com/smasher164/mem)
+[![Documentation](https://img.shields.io/badge/%E2%80%8B-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/smasher164/mem)
 [![Build Status](https://travis-ci.org/smasher164/mem.svg?branch=master)](https://travis-ci.org/smasher164/mem)
 
 Package mem implements a memory allocator and deallocator.
