@@ -3,6 +3,7 @@
 package mem
 
 import (
+	"reflect"
 	"unsafe"
 
 	"golang.org/x/sys/unix"
@@ -18,11 +19,10 @@ func mmap(size uint) (unsafe.Pointer, error) {
 
 func munmap(p unsafe.Pointer) error {
 	size := int(((*header)(p)).size + szheader)
-	var sl = struct {
-		addr unsafe.Pointer
-		len  int
-		cap  int
-	}{p, size, size}
-	b := *(*[]byte)(unsafe.Pointer(&sl))
+	var b []byte
+	sl := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sl.Data = uintptr(p)
+	sl.Len = size
+	sl.Cap = size
 	return unix.Munmap(b)
 }
